@@ -15,6 +15,7 @@
         $stmt->execute();
         if($stmt->affected_rows > 0){
             header("location: index.php");
+            exit();
         }
     }
 

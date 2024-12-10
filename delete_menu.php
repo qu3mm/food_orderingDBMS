@@ -11,6 +11,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $stmt->bind_param("i",$menu_id);
     if($stmt->execute()){
         header("Location: index.php");
+        exit();
     }
 }
 

@@ -11,9 +11,13 @@ $result = $conn->query($sqlquery);
 
 if($_SERVER['REQUEST_METHOD'] == 'GET' and isset($_GET['search_menu'])){
     $searchItem = $_GET['search_menu'];
-    $sqlquery = "SELECT a.menu_id, a.name, a.description,  b.name as category_name, a.price FROM tbl_menu a
+    $sqlquery = "SELECT 
+                a.*,
+                b.name as category_name
+                FROM tbl_menu a
                 INNER JOIN tbl_categories b ON a.category_id = b.category_id
                 WHERE a.name LIKE ?";
+
     $stmt = $conn->prepare($sqlquery);
     $searchPattern = "%". $searchItem ."%";
     $stmt->bind_param("s", $searchPattern);
@@ -66,6 +70,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' and isset($_GET['search_menu'])){
 
     <div class="relative overflow-x-auto">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <?php  if ($result->num_rows > 0) { ?>
             <thead class="text-xs text-gray-700 uppercase bg-green-200 dark:bg-gray-700 dark:text-gray-400">
             <tr>
                 <th scope="col" class="px-6 py-3">
@@ -90,7 +95,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' and isset($_GET['search_menu'])){
             </thead>
             <tbody >
             <?php
-            if ($result->num_rows > 0) {
+
             while($row = $result->fetch_assoc()) {?>
             <tr>
                 <td class="px-6 py-4  text-gray-900 whitespace-nowrap dark:text-white"><?= $row['menu_id'] ?></td>
@@ -112,7 +117,11 @@ if($_SERVER['REQUEST_METHOD'] == 'GET' and isset($_GET['search_menu'])){
                 </td>
             </tr>
             </tbody>
-            <?php  } } ?>
+            <?php  }
+            }else{
+                echo 'Sorry, no menu item found with the name "' . $_GET['search_menu'] . '". Please try a different search.';
+            } ?>
+
         </table>
     </div>
 
