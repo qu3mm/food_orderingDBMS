@@ -1,9 +1,9 @@
 <?php
 
-$servername = "localhost";
-$username = "root";
-$password = "root";
-$database = "food_ordering";
+$servername =  getenv('servername');;
+$username = getenv('username');;
+$password = getenv('password');;
+$database = getenv('database');;
 
 $conn = new mysqli($servername, $username, $password, $database);
 
